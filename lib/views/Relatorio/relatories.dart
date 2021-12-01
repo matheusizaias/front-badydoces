@@ -49,19 +49,15 @@ class _RelatoriesState extends State<Relatories> {
     var repositorySP =
         Provider.of<SaleProductRepository>(context, listen: true);
 
-    var repositorySP2 =
-        Provider.of<SaleProductRepository>(context, listen: true);
-
     var repositoryProduto =
         Provider.of<ProductRepository>(context, listen: true);
     var infoProd = repositoryProduto.products;
     var itens = repositorySP.salesProducts;
-    var itens2 = repositorySP2.salesProducts;
-    //List<SaleProduct>
 
     var produtosVendas = [];
+    var produtosVendas2 = [];
+    var produtosVendas3 = [];
     var productsByIdSale = [];
-    var travaSoma = 0;
 
     var repositorySales = Provider.of<SaleRepository>(context, listen: true);
     var sales = repositorySales.sales;
@@ -71,75 +67,6 @@ class _RelatoriesState extends State<Relatories> {
     Iterable<Sale> lista_certa;
     double total;
     List<Sale> vendas = sales;
-    total = 0;
-    // vendas.forEach((element) {
-    //   var m = element.value.replaceAll("\$", '');
-    //   if (DateTime.parse(element.createdAt).month ==
-    //           lista2.indexWhere((element) => element == selecionado) - 1 &&
-    //       (DateTime.parse(element.createdAt).year ==
-    //           int.parse(selecionadoAno))) {
-    //     total += double.parse(m);
-    //   } else if ((DateTime.parse(element.createdAt).month ==
-    //           int.parse(selecionadoMes) &&
-    //       (DateTime.parse(element.createdAt).day ==
-    //           int.parse(selecionadoDia)) &&
-    //       (DateTime.parse(element.createdAt).year ==
-    //           int.parse(selecionadoAno)) &&
-    //       selecionado == 'Hoje')) {
-    //     total += double.parse(m);
-    //   } else if ((DateTime.parse(element.createdAt).month ==
-    //           int.parse(selecionadoMes) &&
-    //       (DateTime.parse(element.createdAt).day ==
-    //           int.parse(selecionadoDia) - 1) &&
-    //       (DateTime.parse(element.createdAt).year ==
-    //           int.parse(selecionadoAno)) &&
-    //       selecionado == 'Ontem')) {
-    //     total += double.parse(m);
-    //   }
-    // });
-    String totalString = total.toStringAsFixed(2);
-
-    itens.forEach((element) {
-      int cont = 0;
-      if (produtosVendas.isEmpty == true) {
-        produtosVendas.add(element);
-        cont = 1;
-      } else {
-        produtosVendas.forEach((element2) {
-          if (element.product_id == element2.product_id) {
-            cont = 1;
-          }
-        });
-      }
-      if (cont == 0) {
-        produtosVendas.add(element);
-      }
-    });
-
-    produtosVendas.forEach((element2) {
-      infoProd.forEach((element) => {
-            if (element.id_product == element2.product_id)
-              {
-                productsByIdSale.add(element),
-              }
-          });
-    });
-
-    // for (var i = 0; i < produtosVendas.length; i++) {
-    //   produtosVendas[i].qtd = 0;
-    // }
-    if (travaSoma == 0) {
-      for (var i = 0; i < produtosVendas.length; i++) {
-        for (var j = 0; j < itens2.length; j++) {
-          if (produtosVendas[i].product_id == itens2[j].product_id &&
-              produtosVendas[i].sale_id != itens2[j].sale_id) {
-            produtosVendas[i].qtd = produtosVendas[i].qtd + itens2[j].qtd;
-          }
-        }
-      }
-
-      travaSoma = 1;
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -149,7 +76,7 @@ class _RelatoriesState extends State<Relatories> {
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded),
-          onPressed: () => Navigator.of(context).pushNamed('/tela_inicial'),
+          onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.white,
         title: Text(
@@ -160,43 +87,134 @@ class _RelatoriesState extends State<Relatories> {
         ),
       ),
       body: Column(children: [
-        // dropDownMeses(),
+        dropDownMeses(),
+        Divider(),
+        Container(
+          margin: EdgeInsets.only(top: 5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 120,
+              ),
+              Column(
+                children: [
+                  Text(
+                    'Nome Produto',
+                    style: GoogleFonts.ubuntu(fontSize: 18),
+                  ),
+                ],
+              ),
+              VerticalDivider(
+                width: 128,
+              ),
+              // SizedBox(
+              //   width: 125,
+              // ),
+              // SizedBox(
+              //   width: 78,
+              // ),
+              VerticalDivider(
+                width: 25,
+                color: Colors.amber,
+              ),
+              Column(
+                children: [
+                  Text(
+                    'Qtd',
+                    style: GoogleFonts.ubuntu(fontSize: 18),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        Divider(),
         // Divider(),
         Expanded(
           child: Consumer<SaleRepository>(
             builder: (context, value, child) {
-//               if (selecionado != 'Hoje' && selecionado != 'Ontem') {
-//                 lista_certa = value.sales.where((element) =>
-//                     (DateTime.parse(element.createdAt).month ==
-//                         lista2.indexWhere((element) => element == selecionado) -
-//                             1) &&
-//                     (DateTime.parse(element.createdAt).year ==
-//                         int.parse(selecionadoAno)));
-//               } else if (selecionado == 'Hoje') {
-//                 lista_certa = value.sales.where((element) =>
-//                     (DateTime.parse(element.createdAt).month ==
-//                             int.parse(selecionadoMes) &&
-//                         (DateTime.parse(element.createdAt).day ==
-//                             int.parse(selecionadoDia)) &&
-//                         (DateTime.parse(element.createdAt).year ==
-//                             int.parse(selecionadoAno))));
-//               } else {
-//                 lista_certa = value.sales.where((element) =>
-//                     (DateTime.parse(element.createdAt).month ==
-//                             int.parse(selecionadoMes) &&
-//                         (DateTime.parse(element.createdAt).day ==
-//                             int.parse(selecionadoDia) - 1) &&
-//                         (DateTime.parse(element.createdAt).year ==
-//                             int.parse(selecionadoAno))));
-//               }
-//
-//               lista_certa.forEach((element) {
-//                 var m = element.value.replaceAll("\$", '');
-//                 total += double.parse(m);
-//               });
+              if (selecionado != 'Hoje' && selecionado != 'Ontem') {
+                lista_certa = value.sales.where((element) =>
+                    (DateTime.parse(element.createdAt).month ==
+                        lista2.indexWhere((element) => element == selecionado) -
+                            1) &&
+                    (DateTime.parse(element.createdAt).year ==
+                        int.parse(selecionadoAno)));
+              } else if (selecionado == 'Hoje') {
+                lista_certa = value.sales.where((element) =>
+                    (DateTime.parse(element.createdAt).month ==
+                            int.parse(selecionadoMes) &&
+                        (DateTime.parse(element.createdAt).day ==
+                            int.parse(selecionadoDia)) &&
+                        (DateTime.parse(element.createdAt).year ==
+                            int.parse(selecionadoAno))));
+              } else {
+                lista_certa = value.sales.where((element) =>
+                    (DateTime.parse(element.createdAt).month ==
+                            int.parse(selecionadoMes) &&
+                        (DateTime.parse(element.createdAt).day ==
+                            int.parse(selecionadoDia) - 1) &&
+                        (DateTime.parse(element.createdAt).year ==
+                            int.parse(selecionadoAno))));
+              }
 
-//sllcccc
+              itens.forEach((element) {
+                lista_certa.forEach((e) {
+                  if (element.sale_id == e.idSale) {
+                    produtosVendas2.add(element);
+                  }
+                });
+              });
 
+              print(produtosVendas2.length);
+
+              itens.forEach((element) {
+                int cont = 0;
+                if (produtosVendas.isEmpty == true) {
+                  lista_certa.forEach((e) {
+                    if (element.sale_id == e.idSale) {
+                      produtosVendas.add(element);
+                      cont = 1;
+                    }
+                  });
+                } else {
+                  produtosVendas.forEach((element2) {
+                    if (element.product_id == element2.product_id) {
+                      cont = 1;
+                    }
+                  });
+                }
+                if (cont == 0) {
+                  lista_certa.forEach((e) {
+                    if (element.sale_id == e.idSale) {
+                      produtosVendas.add(element);
+                    }
+                  });
+                }
+              });
+
+              produtosVendas.forEach((element2) {
+                infoProd.forEach((element) => {
+                      if (element.id_product == element2.product_id)
+                        {
+                          productsByIdSale.add(element),
+                        }
+                    });
+              });
+
+              for (var i = 0; i < produtosVendas.length; i++) {
+                for (var j = 0; j < produtosVendas2.length; j++) {
+                  if (produtosVendas[i].product_id ==
+                          produtosVendas2[j].product_id &&
+                      produtosVendas[i].sale_id != produtosVendas2[j].sale_id) {
+                    produtosVendas[i].qtd =
+                        produtosVendas[i].qtd + produtosVendas2[j].qtd;
+                  }
+                }
+              }
               return ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: produtosVendas.length,
@@ -241,14 +259,13 @@ class _RelatoriesState extends State<Relatories> {
                                   ),
                                 ),
                                 trailing: Container(
-                                  width: 100,
+                                  width: 30,
                                   child: Row(
                                     children: [
                                       Text(
                                         products.qtd.toString(),
                                         style: GoogleFonts.ubuntu(
-                                          color: Colors.black,
-                                        ),
+                                            color: Colors.black, fontSize: 20),
                                       )
                                     ],
                                   ),
