@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:math';
 
 import 'package:badydoces/models/produto.model.dart';
@@ -48,15 +49,19 @@ class _RelatoriesState extends State<Relatories> {
     var repositorySP =
         Provider.of<SaleProductRepository>(context, listen: true);
 
+    var repositorySP2 =
+        Provider.of<SaleProductRepository>(context, listen: true);
+
     var repositoryProduto =
         Provider.of<ProductRepository>(context, listen: true);
     var infoProd = repositoryProduto.products;
     var itens = repositorySP.salesProducts;
+    var itens2 = repositorySP2.salesProducts;
     //List<SaleProduct>
 
-    List<SaleProduct> produtosVendas = [];
-    List<Product> productsByIdSale = [];
-    List<Product> productsFiltre = [];
+    var produtosVendas = [];
+    var productsByIdSale = [];
+    var travaSoma = 0;
 
     var repositorySales = Provider.of<SaleRepository>(context, listen: true);
     var sales = repositorySales.sales;
@@ -95,12 +100,6 @@ class _RelatoriesState extends State<Relatories> {
     String totalString = total.toStringAsFixed(2);
 
     itens.forEach((element) {
-      print(element.product_id);
-    });
-
-    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-
-    itens.forEach((element) {
       int cont = 0;
       if (produtosVendas.isEmpty == true) {
         produtosVendas.add(element);
@@ -108,7 +107,7 @@ class _RelatoriesState extends State<Relatories> {
       } else {
         produtosVendas.forEach((element2) {
           if (element.product_id == element2.product_id) {
-            cont += 1;
+            cont = 1;
           }
         });
       }
@@ -117,31 +116,30 @@ class _RelatoriesState extends State<Relatories> {
       }
     });
 
-    produtosVendas.forEach((element) {
-      print(element.product_id);
+    produtosVendas.forEach((element2) {
+      infoProd.forEach((element) => {
+            if (element.id_product == element2.product_id)
+              {
+                productsByIdSale.add(element),
+              }
+          });
     });
-    print('bbbbbbbbbbbbbbbbbbb');
 
-//     itens.forEach((element2) {
-//       infoProd.forEach((element) => {
-//             if (element.id_product == element2.product_id)
-//               {
-//                 productsByIdSale.add(element),
-//               }
-//           });
-//     });
-//
-//     productsByIdSale.forEach((element) {
-//       productsByIdSale.forEach((element2) {
-//         if (element.name == element2.name) {
-//           productsByIdSale.remove(element2);
-//         }
-//       });
-//     });
-//
-//     productsByIdSale.forEach((element) {
-//       print(element.name);
-//     });
+    // for (var i = 0; i < produtosVendas.length; i++) {
+    //   produtosVendas[i].qtd = 0;
+    // }
+    if (travaSoma == 0) {
+      for (var i = 0; i < produtosVendas.length; i++) {
+        for (var j = 0; j < itens2.length; j++) {
+          if (produtosVendas[i].product_id == itens2[j].product_id &&
+              produtosVendas[i].sale_id != itens2[j].sale_id) {
+            produtosVendas[i].qtd = produtosVendas[i].qtd + itens2[j].qtd;
+          }
+        }
+      }
+
+      travaSoma = 1;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -162,8 +160,8 @@ class _RelatoriesState extends State<Relatories> {
         ),
       ),
       body: Column(children: [
-        dropDownMeses(),
-        Divider(),
+        // dropDownMeses(),
+        // Divider(),
         Expanded(
           child: Consumer<SaleRepository>(
             builder: (context, value, child) {
@@ -197,77 +195,72 @@ class _RelatoriesState extends State<Relatories> {
 //                 total += double.parse(m);
 //               });
 
-              itens.forEach((element) {
-                print(element.product_id);
-              });
-              return Container();
+              return ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: produtosVendas.length,
+                // ignore: missing_return
+                itemBuilder: (_, index) {
+                  var products = produtosVendas.toList()[index];
+                  var productsName = productsByIdSale.toList()[index];
 
-//               return ListView.builder(
-//                 scrollDirection: Axis.vertical,
-//                 itemCount: itens.length,
-//                 // ignore: missing_return
-//                 itemBuilder: (_, index) {
-//                   var products = itens.toList()[index];
-//                   //var productsName = productsByIdSale.toList()[index];
-//
-//                   return Column(
-//                     children: [
-//                       Row(
-//                         children: [
-//                           Flexible(
-//                             flex: 2,
-//                             child: Container(
-//                               margin: EdgeInsets.only(
-//                                   left: 30, right: 0, top: 10, bottom: 8),
-//                               child: Icon(
-//                                 Icons.point_of_sale,
-//                                 color: Colors.green,
-//                                 size: 40,
-//                               ),
-//                             ),
-//                           ),
-//                           Flexible(
-//                             flex: 9,
-//                             child: Container(
-//                               margin: EdgeInsets.only(
-//                                   left: 30, right: 30, top: 5, bottom: 5),
-//                               // decoration: BoxDecoration(
-//                               //   color: Colors.white,
-//                               //   borderRadius: BorderRadius.circular(8),
-//                               //   border: Border.fromBorderSide(
-//                               //       BorderSide(color: Colors.blue, width: 2.0)),
-//                               // ),
-//                               child: ListTile(
-//                                 title: Text(
-//                                   products.product_id,
-//                                   style: GoogleFonts.ubuntu(
-//                                     color: Colors.black,
-//                                     fontSize: 20,
-//                                   ),
-//                                 ),
-//                                 trailing: Container(
-//                                   width: 100,
-//                                   child: Row(
-//                                     children: [
-//                                       Text(
-//                                         products.qtd.toString(),
-//                                         style: GoogleFonts.ubuntu(
-//                                           color: Colors.black,
-//                                         ),
-//                                       )
-//                                     ],
-//                                   ),
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       Divider(),
-//                     ],
-//                   );
-//                 },
-//               );
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            flex: 2,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                  left: 30, right: 0, top: 10, bottom: 8),
+                              child: Icon(
+                                Icons.point_of_sale,
+                                color: Colors.green,
+                                size: 40,
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 9,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                  left: 30, right: 30, top: 5, bottom: 5),
+                              // decoration: BoxDecoration(
+                              //   color: Colors.white,
+                              //   borderRadius: BorderRadius.circular(8),
+                              //   border: Border.fromBorderSide(
+                              //       BorderSide(color: Colors.blue, width: 2.0)),
+                              // ),
+                              child: ListTile(
+                                title: Text(
+                                  productsName.name,
+                                  style: GoogleFonts.ubuntu(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                trailing: Container(
+                                  width: 100,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        products.qtd.toString(),
+                                        style: GoogleFonts.ubuntu(
+                                          color: Colors.black,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ),
