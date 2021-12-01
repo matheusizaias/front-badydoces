@@ -52,10 +52,9 @@ class _RelatoriesState extends State<Relatories> {
         Provider.of<ProductRepository>(context, listen: true);
     var infoProd = repositoryProduto.products;
     var itens = repositorySP.salesProducts;
-    var itens2 = repositorySP.salesProducts;
     //List<SaleProduct>
 
-    Iterable<SaleProduct> produtosVendas;
+    List<SaleProduct> produtosVendas = [];
     List<Product> productsByIdSale = [];
     List<Product> productsFiltre = [];
 
@@ -68,40 +67,60 @@ class _RelatoriesState extends State<Relatories> {
     double total;
     List<Sale> vendas = sales;
     total = 0;
-    vendas.forEach((element) {
-      var m = element.value.replaceAll("\$", '');
-      if (DateTime.parse(element.createdAt).month ==
-              lista2.indexWhere((element) => element == selecionado) - 1 &&
-          (DateTime.parse(element.createdAt).year ==
-              int.parse(selecionadoAno))) {
-        total += double.parse(m);
-      } else if ((DateTime.parse(element.createdAt).month ==
-              int.parse(selecionadoMes) &&
-          (DateTime.parse(element.createdAt).day ==
-              int.parse(selecionadoDia)) &&
-          (DateTime.parse(element.createdAt).year ==
-              int.parse(selecionadoAno)) &&
-          selecionado == 'Hoje')) {
-        total += double.parse(m);
-      } else if ((DateTime.parse(element.createdAt).month ==
-              int.parse(selecionadoMes) &&
-          (DateTime.parse(element.createdAt).day ==
-              int.parse(selecionadoDia) - 1) &&
-          (DateTime.parse(element.createdAt).year ==
-              int.parse(selecionadoAno)) &&
-          selecionado == 'Ontem')) {
-        total += double.parse(m);
-      }
-    });
+    // vendas.forEach((element) {
+    //   var m = element.value.replaceAll("\$", '');
+    //   if (DateTime.parse(element.createdAt).month ==
+    //           lista2.indexWhere((element) => element == selecionado) - 1 &&
+    //       (DateTime.parse(element.createdAt).year ==
+    //           int.parse(selecionadoAno))) {
+    //     total += double.parse(m);
+    //   } else if ((DateTime.parse(element.createdAt).month ==
+    //           int.parse(selecionadoMes) &&
+    //       (DateTime.parse(element.createdAt).day ==
+    //           int.parse(selecionadoDia)) &&
+    //       (DateTime.parse(element.createdAt).year ==
+    //           int.parse(selecionadoAno)) &&
+    //       selecionado == 'Hoje')) {
+    //     total += double.parse(m);
+    //   } else if ((DateTime.parse(element.createdAt).month ==
+    //           int.parse(selecionadoMes) &&
+    //       (DateTime.parse(element.createdAt).day ==
+    //           int.parse(selecionadoDia) - 1) &&
+    //       (DateTime.parse(element.createdAt).year ==
+    //           int.parse(selecionadoAno)) &&
+    //       selecionado == 'Ontem')) {
+    //     total += double.parse(m);
+    //   }
+    // });
     String totalString = total.toStringAsFixed(2);
 
     itens.forEach((element) {
-      itens2.remove(element);
-    });
-
-    itens2.forEach((element) {
       print(element.product_id);
     });
+
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+
+    itens.forEach((element) {
+      int cont = 0;
+      if (produtosVendas.isEmpty == true) {
+        produtosVendas.add(element);
+        cont = 1;
+      } else {
+        produtosVendas.forEach((element2) {
+          if (element.product_id == element2.product_id) {
+            cont += 1;
+          }
+        });
+      }
+      if (cont == 0) {
+        produtosVendas.add(element);
+      }
+    });
+
+    produtosVendas.forEach((element) {
+      print(element.product_id);
+    });
+    print('bbbbbbbbbbbbbbbbbbb');
 
 //     itens.forEach((element2) {
 //       infoProd.forEach((element) => {
