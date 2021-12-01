@@ -18,13 +18,15 @@ class FormInfoSalestWidget extends StatefulWidget {
 class _FormInfoSalestWidgetWidgetState extends State<FormInfoSalestWidget> {
   @override
   Widget build(BuildContext context) {
-    String index;
     Sale vendas = ModalRoute.of(context).settings.arguments;
+
     var repositorySale = Provider.of<SaleRepository>(context, listen: true);
     var repositorySP =
         Provider.of<SaleProductRepository>(context, listen: true);
+
     var repositoryProduto =
         Provider.of<ProductRepository>(context, listen: true);
+
     var infoProd = repositoryProduto.products;
     var sales = repositorySale.sales;
     var itens = repositorySP.salesProducts;
@@ -32,6 +34,7 @@ class _FormInfoSalestWidgetWidgetState extends State<FormInfoSalestWidget> {
     //List<SaleProduct>
 
     Iterable<SaleProduct> produtosVendas;
+    List<Product> productsByIdSale = [];
 
     // index = vendas.idSale;
     // sales.forEach((sales) {
@@ -115,83 +118,106 @@ class _FormInfoSalestWidgetWidgetState extends State<FormInfoSalestWidget> {
               ],
             ),
             Divider(),
-            Expanded(
-              child: Consumer<SaleProductRepository>(
-                builder: (context, value, child) {
-                  produtosVendas = value.salesProducts
-                      .where((element) => element.sale_id == vendas.idSale);
-                  // value.salesProducts;
-                  // vendas.forEach((element) {
-                  //   var id = element.idProduct.toString();
-                  //   produtosCat = value.products
-                  //       .where((product) => product.id_product == id);
-                  // });
-                  // produtosCat = value.products.where(
-                  //     (product) => product.id_product == vendas.idProduct);
+            Consumer<SaleProductRepository>(
+              builder: (context, value, child) {
+                produtosVendas = value.salesProducts
+                    .where((element) => element.sale_id == vendas.idSale);
 
-                  return ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: produtosVendas.length,
-                    itemBuilder: (_, index) {
-                      var product = produtosVendas.toList()[index];
+                produtosVendas.forEach((element2) {
+                  infoProd.forEach((element) => {
+                        if (element.id_product == element2.product_id)
+                          {productsByIdSale.add(element)}
+                      });
+                });
+                SizedBox(height: 50);
 
-                      return Dismissible(
-                        key: Key(product.product_id),
-                        background: Container(
-                          color: Colors.red,
-                        ),
-                        child: Container(
-                          margin: EdgeInsets.only(left: 30, right: 30, top: 10),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(11.36),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color(0xff71C173),
-                                  blurRadius: 2,
-                                  offset: Offset(1, 3),
-                                ),
-                              ]),
-                          child: ListTile(
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                '/edit_product',
-                                arguments: product,
-                              );
-                            },
-                            title: Text(
-                              product.product_id,
-                              style: GoogleFonts.ubuntu(
-                                color: Colors.black,
-                              ),
-                            ),
-                            subtitle: Text(
-                              product.price.toString(),
-                              style: GoogleFonts.ubuntu(
-                                color: Colors.black,
-                              ),
-                            ),
-                            trailing: Container(
-                              width: 20,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    product.qtd.toString(),
-                                    style: GoogleFonts.ubuntu(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
+                return Row(
+                  children: [
+                    SingleChildScrollView(
+                      child: Column(
+                        children: productsByIdSale
+                            .map((e) => Text(
+                                  e.name,
+                                  style: GoogleFonts.ubuntu(fontSize: 22),
+                                  textAlign: TextAlign.start,
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                    SizedBox(width: 120),
+                    SingleChildScrollView(
+                      child: Column(
+                        children: produtosVendas
+                            .map((e) => Text(
+                                  e.price,
+                                  style: GoogleFonts.ubuntu(fontSize: 22),
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                    SizedBox(width: 100),
+                    SingleChildScrollView(
+                      child: Column(
+                        children: produtosVendas
+                            .map((e) => Text(
+                                  e.qtd.toString(),
+                                  style: GoogleFonts.ubuntu(fontSize: 22),
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                  ],
+                );
+
+//                 return ListView.builder(
+//                   scrollDirection: Axis.vertical,
+//                   itemCount: produtosVendas.length,
+//                   itemBuilder: (_, index) {
+//                     var product = produtosVendas.toList()[index];
+//                     print(product);
+//
+//                     return Container();
+//
+//                     // return Container(
+//                     //   margin: EdgeInsets.only(left: 30, right: 30, top: 10),
+//                     //   decoration: BoxDecoration(
+//                     //       color: Colors.white,
+//                     //       borderRadius: BorderRadius.circular(11.36),
+//                     //       boxShadow: [
+//                     //         BoxShadow(
+//                     //           color: Color(0xff71C173),
+//                     //           blurRadius: 2,
+//                     //           offset: Offset(1, 3),
+//                     //         ),
+//                     //       ]),
+//                     //   child: ListTile(
+//                     //     title: Text(
+//                     //       "product",
+//                     //       style: GoogleFonts.ubuntu(
+//                     //         color: Colors.black,
+//                     //       ),
+//                     //     ),
+//                     //     subtitle: Text(
+//                     //       product.price.toString(),
+//                     //       style: GoogleFonts.ubuntu(
+//                     //         color: Colors.black,
+//                     //       ),
+//                     //     ),
+//                     //     trailing: Container(
+//                     //       width: 20,
+//                     //       child: Text(
+//                     //         product.qtd.toString(),
+//                     //         style: GoogleFonts.ubuntu(
+//                     //           color: Colors.black,
+//                     //           fontSize: 16,
+//                     //         ),
+//                     //       ),
+//                     //     ),
+//                     //   ),
+//                     // );
+//                   },
+//                 );
+              },
             ),
           ],
         ),
