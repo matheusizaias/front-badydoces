@@ -108,7 +108,8 @@ class Home extends StatelessWidget {
                       color: Colors.green[200],
                     ),
                   ),
-                  onPressed: () => Navigator.of(context).pushNamed(''),
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed('/relatories'),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

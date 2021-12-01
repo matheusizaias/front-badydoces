@@ -118,6 +118,57 @@ class _FormInfoSalestWidgetWidgetState extends State<FormInfoSalestWidget> {
               ],
             ),
             Divider(),
+            Container(
+              margin: EdgeInsets.only(top: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 35,
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        'Nome Produto',
+                        style: GoogleFonts.ubuntu(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  VerticalDivider(
+                    width: 128,
+                  ),
+                  // SizedBox(
+                  //   width: 125,
+                  // ),
+                  Column(
+                    children: [
+                      Text(
+                        'Preço',
+                        style: GoogleFonts.ubuntu(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  // SizedBox(
+                  //   width: 78,
+                  // ),
+                  VerticalDivider(
+                    width: 75,
+                    color: Colors.amber,
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        'Qtd',
+                        style: GoogleFonts.ubuntu(fontSize: 18),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Divider(),
             Consumer<SaleProductRepository>(
               builder: (context, value, child) {
                 produtosVendas = value.salesProducts
@@ -135,88 +186,65 @@ class _FormInfoSalestWidgetWidgetState extends State<FormInfoSalestWidget> {
                   children: [
                     SingleChildScrollView(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: productsByIdSale
-                            .map((e) => Text(
-                                  e.name,
-                                  style: GoogleFonts.ubuntu(fontSize: 22),
-                                  textAlign: TextAlign.start,
-                                ))
-                            .toList(),
-                      ),
-                    ),
-                    SizedBox(width: 120),
-                    SingleChildScrollView(
-                      child: Column(
-                        children: produtosVendas
-                            .map((e) => Text(
-                                  e.price,
-                                  style: GoogleFonts.ubuntu(fontSize: 22),
-                                ))
+                            .map(
+                              (e) => Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.check, color: Colors.green),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        e.name,
+                                        style: GoogleFonts.ubuntu(fontSize: 22),
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(),
+                                ],
+                              ),
+                            )
                             .toList(),
                       ),
                     ),
                     SizedBox(width: 100),
                     SingleChildScrollView(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: produtosVendas
-                            .map((e) => Text(
-                                  e.qtd.toString(),
-                                  style: GoogleFonts.ubuntu(fontSize: 22),
+                            .map((e) => Column(
+                                  children: [
+                                    Text(
+                                      e.price,
+                                      style: GoogleFonts.ubuntu(fontSize: 22),
+                                    ),
+                                    Divider(),
+                                  ],
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                    SizedBox(width: 70),
+                    SingleChildScrollView(
+                      child: Column(
+                        children: produtosVendas
+                            .map((e) => Column(
+                                  children: [
+                                    Text(
+                                      e.qtd.toString(),
+                                      style: GoogleFonts.ubuntu(fontSize: 22),
+                                    ),
+                                    Divider()
+                                  ],
                                 ))
                             .toList(),
                       ),
                     ),
                   ],
                 );
-
-//                 return ListView.builder(
-//                   scrollDirection: Axis.vertical,
-//                   itemCount: produtosVendas.length,
-//                   itemBuilder: (_, index) {
-//                     var product = produtosVendas.toList()[index];
-//                     print(product);
-//
-//                     return Container();
-//
-//                     // return Container(
-//                     //   margin: EdgeInsets.only(left: 30, right: 30, top: 10),
-//                     //   decoration: BoxDecoration(
-//                     //       color: Colors.white,
-//                     //       borderRadius: BorderRadius.circular(11.36),
-//                     //       boxShadow: [
-//                     //         BoxShadow(
-//                     //           color: Color(0xff71C173),
-//                     //           blurRadius: 2,
-//                     //           offset: Offset(1, 3),
-//                     //         ),
-//                     //       ]),
-//                     //   child: ListTile(
-//                     //     title: Text(
-//                     //       "product",
-//                     //       style: GoogleFonts.ubuntu(
-//                     //         color: Colors.black,
-//                     //       ),
-//                     //     ),
-//                     //     subtitle: Text(
-//                     //       product.price.toString(),
-//                     //       style: GoogleFonts.ubuntu(
-//                     //         color: Colors.black,
-//                     //       ),
-//                     //     ),
-//                     //     trailing: Container(
-//                     //       width: 20,
-//                     //       child: Text(
-//                     //         product.qtd.toString(),
-//                     //         style: GoogleFonts.ubuntu(
-//                     //           color: Colors.black,
-//                     //           fontSize: 16,
-//                     //         ),
-//                     //       ),
-//                     //     ),
-//                     //   ),
-//                     // );
-//                   },
-//                 );
               },
             ),
           ],

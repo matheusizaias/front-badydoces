@@ -14,6 +14,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import 'Relatorio/relatories.dart';
 import 'Stock/form_stock/add_products.dart';
 import 'Stock/form_stock/edit_products.dart';
 import 'components/bottomNaviBar/ListSale/info_sales.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
           '/edit_product': (context) => EditProduct(),
           '/listsales': (context) => ListSales(),
           '/infosales': (context) => InfoSales(),
+          '/relatories': (context) => Relatories(),
         },
         initialRoute: '/',
       ),
