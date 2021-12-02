@@ -1,4 +1,5 @@
 import 'package:badydoces/models/venda.model.dart';
+import 'package:badydoces/repositories/venda_produto_repository.dart';
 import 'package:badydoces/repositories/venda_repository.dart';
 import 'package:badydoces/views/Home/widgets/card_latest_sales/card_latest_sales.dart';
 import 'package:badydoces/views/auth/AuthController.dart';
@@ -108,8 +109,9 @@ class Home extends StatelessWidget {
                       color: Colors.green[200],
                     ),
                   ),
-                  onPressed: () =>
-                      Navigator.of(context).pushNamed('/relatories'),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/relatories');
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

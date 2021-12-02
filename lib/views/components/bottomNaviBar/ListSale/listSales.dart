@@ -1,4 +1,5 @@
 import 'package:badydoces/models/venda.model.dart';
+import 'package:badydoces/repositories/venda_produto_repository.dart';
 import 'package:badydoces/repositories/venda_repository.dart';
 import 'package:badydoces/views/components/bottomNaviBar/index.dart';
 import 'package:flutter/material.dart';

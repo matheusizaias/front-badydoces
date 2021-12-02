@@ -90,7 +90,7 @@ class ProductRepository extends ChangeNotifier {
     Admin usuario = Admin.fromJson(jsonDecode(preferences?.getString('user')));
     var token = usuario.token;
     var response = await http.delete(
-        "https://app-bady.herokuapp.com/delete-product/$id",
+        "https://back-bady2.herokuapp.com/delete-product/$id",
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': "Bearer $token"
@@ -106,7 +106,7 @@ class ProductRepository extends ChangeNotifier {
     Admin usuario = Admin.fromJson(jsonDecode(preferences.getString('user')));
     var token = usuario.token;
     var response = await http.put(
-        "https://app-bady.herokuapp.com/update-product/${product.id_product}",
+        "https://back-bady2.herokuapp.com/update-product/${product.id_product}",
         body: jsonEncode(product.toJson()),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

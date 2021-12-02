@@ -2,6 +2,7 @@ import 'package:badydoces/models/produto.model.dart';
 import 'package:badydoces/repositories/admin_repository.dart';
 import 'package:badydoces/repositories/categoria_repository.dart';
 import 'package:badydoces/repositories/produto_repository.dart';
+import 'package:badydoces/repositories/venda_produto_repository.dart';
 import 'package:badydoces/repositories/venda_repository.dart';
 import 'package:badydoces/views/NewSale/new_sale_controller.dart';
 import 'package:badydoces/views/NewSale/widgets/product_add/product_add_widget.dart';
@@ -118,6 +119,8 @@ class NewSale extends StatelessWidget {
                         .select_product = null;
                     Provider.of<SaleRepository>(context, listen: false).read();
                     Provider.of<ProductRepository>(context, listen: false)
+                        .read();
+                    Provider.of<SaleProductRepository>(context, listen: false)
                         .read();
                     Navigator.of(context).pushNamed('/listsales');
                   } else {
