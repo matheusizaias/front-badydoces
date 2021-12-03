@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:badydoces/models/categoria.model.dart';
 import 'package:badydoces/models/new_sale_model.dart';
 import 'package:badydoces/models/produto.model.dart';
@@ -25,7 +27,6 @@ class NewSaleController extends ChangeNotifier {
 
   Sale fieldsNewSale = Sale();
   void addProduct(Product product) {
-    print(product.amount);
     this.products.add(product);
     notifyListeners();
   }
@@ -52,22 +53,4 @@ class NewSaleController extends ChangeNotifier {
     }
     notifyListeners();
   }
-
-  // Future<bool> realizarVendaNpN(int qtd) async {
-  //   created2 = false;
-  //   newSaleProduct = SaleProduct(
-  //     sale_id: fieldsNewSale.idSale,
-  //     idProduct: products,
-  //     qtd: qtd,
-  //   );
-  //   try {
-  //     bool created2 = await SaleProductRepository().create(newSaleProduct);
-  //     notifyListeners();
-  //     print(created2);
-  //     return created2;
-  //   } catch (err) {
-  //     return false;
-  //   }
-  //   notifyListeners();
-  // }
 }

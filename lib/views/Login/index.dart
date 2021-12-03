@@ -52,7 +52,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 // configura o button
     Widget okButton = FlatButton(
       child: Text("OK"),
-      onPressed: () {},
+      onPressed: () => Navigator.of(context).pop(),
     );
 
 // configura o AlertDialog

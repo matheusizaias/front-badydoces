@@ -36,17 +36,6 @@ class _FormInfoSalestWidgetWidgetState extends State<FormInfoSalestWidget> {
     Iterable<SaleProduct> produtosVendas;
     List<Product> productsByIdSale = [];
 
-    // index = vendas.idSale;
-    // sales.forEach((sales) {
-    //   repositoryProduto.products.forEach((product2) {
-    //     if (sales.idSale == index) {
-    //       if (sales.idProduct == product2.id_product) {
-    //         produtosCat(product2);
-    //       }
-    //     }
-    //   });
-    // });
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Form(
@@ -120,50 +109,40 @@ class _FormInfoSalestWidgetWidgetState extends State<FormInfoSalestWidget> {
             Divider(),
             Container(
               margin: EdgeInsets.only(top: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-              ),
               child: Row(
                 children: [
-                  SizedBox(
-                    width: 35,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(35, 0, 120, 5),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Nome Produto',
+                          style: GoogleFonts.ubuntu(fontSize: 18),
+                        ),
+                      ],
+                    ),
                   ),
-                  Column(
-                    children: [
-                      Text(
-                        'Nome Produto',
-                        style: GoogleFonts.ubuntu(fontSize: 18),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(35, 0, 40, 5),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Preço',
+                          style: GoogleFonts.ubuntu(fontSize: 18),
+                        ),
+                      ],
+                    ),
                   ),
-                  VerticalDivider(
-                    width: 128,
-                  ),
-                  // SizedBox(
-                  //   width: 125,
-                  // ),
-                  Column(
-                    children: [
-                      Text(
-                        'Preço',
-                        style: GoogleFonts.ubuntu(fontSize: 18),
-                      ),
-                    ],
-                  ),
-                  // SizedBox(
-                  //   width: 78,
-                  // ),
-                  VerticalDivider(
-                    width: 75,
-                    color: Colors.amber,
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        'Qtd',
-                        style: GoogleFonts.ubuntu(fontSize: 18),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(25, 0, 0, 5),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Qtd',
+                          style: GoogleFonts.ubuntu(fontSize: 18),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -180,14 +159,14 @@ class _FormInfoSalestWidgetWidgetState extends State<FormInfoSalestWidget> {
                           {productsByIdSale.add(element)}
                       });
                 });
-                SizedBox(height: 50);
 
                 return Row(
                   children: [
                     SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 120, 5),
                       child: Column(
+                        //mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: productsByIdSale
                             .map(
                               (e) => Column(
@@ -195,7 +174,6 @@ class _FormInfoSalestWidgetWidgetState extends State<FormInfoSalestWidget> {
                                   Row(
                                     children: [
                                       Icon(Icons.check, color: Colors.green),
-                                      SizedBox(width: 5),
                                       Text(
                                         e.name,
                                         style: GoogleFonts.ubuntu(fontSize: 22),
@@ -209,11 +187,10 @@ class _FormInfoSalestWidgetWidgetState extends State<FormInfoSalestWidget> {
                             .toList(),
                       ),
                     ),
-                    SizedBox(width: 100),
                     SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 60, 5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: produtosVendas
                             .map((e) => Column(
                                   children: [
@@ -227,9 +204,9 @@ class _FormInfoSalestWidgetWidgetState extends State<FormInfoSalestWidget> {
                             .toList(),
                       ),
                     ),
-                    SizedBox(width: 70),
                     SingleChildScrollView(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: produtosVendas
                             .map((e) => Column(
                                   children: [
@@ -237,7 +214,7 @@ class _FormInfoSalestWidgetWidgetState extends State<FormInfoSalestWidget> {
                                       e.qtd.toString(),
                                       style: GoogleFonts.ubuntu(fontSize: 22),
                                     ),
-                                    Divider()
+                                    Divider(),
                                   ],
                                 ))
                             .toList(),

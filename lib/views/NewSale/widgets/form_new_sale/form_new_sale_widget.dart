@@ -27,8 +27,14 @@ class _FormNewSaleWidgetState extends State<FormNewSaleWidget> {
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
   String selectedCategory;
+  var qtdValidation;
   @override
   Widget build(BuildContext context) {
+    var repositoryProduto =
+        Provider.of<ProductRepository>(context, listen: true);
+    qtdValidation = false;
+
+    List<Product> produtosBack = repositoryProduto.products;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
       child: Form(
@@ -171,16 +177,35 @@ class _FormNewSaleWidgetState extends State<FormNewSaleWidget> {
                                 .fieldsNewSale
                                 .value)
                             .round());
-                    Provider.of<NewSaleController>(context, listen: false)
-                        .addProduct(newSale);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      duration: Duration(seconds: 1),
-                      content: Text(
-                        'Venda adicionada com sucesso',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.green,
-                    ));
+                    print(newSale.amount);
+                    produtosBack.forEach((element) {
+                      if (element.id_product == newSale.id_product) {
+                        if (element.amount >= newSale.amount) {
+                          qtdValidation = true;
+                        }
+                      }
+                    });
+                    (qtdValidation == false)
+                        ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            duration: Duration(seconds: 1),
+                            content: Text(
+                              'Quantidade maior que no estoque!!',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: Colors.red,
+                          ))
+                        : Provider.of<NewSaleController>(context, listen: false)
+                            .addProduct(newSale);
+                    if (qtdValidation == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        duration: Duration(seconds: 1),
+                        content: Text(
+                          'Venda adicionada com sucesso',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.green,
+                      ));
+                    }
                   } else {
                     return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       duration: Duration(seconds: 1),

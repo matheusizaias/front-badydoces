@@ -135,88 +135,75 @@ class _ListSalesState extends State<ListSales> {
                   itemBuilder: (_, index) {
                     var vendas = lista_certa.toList()[index];
 
-                    return Dismissible(
-                      key: Key(vendas.costumer),
-                      onDismissed: (direction) {
-                        repositorySales.delete(vendas.idSale);
-                      },
-                      confirmDismiss: (direction) {
-                        return confirmarExclusao(context);
-                      },
-                      background: Container(
-                        color: Colors.red,
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 2,
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                      left: 30, right: 0, top: 10, bottom: 8),
-                                  child: Icon(
-                                    Icons.point_of_sale,
-                                    color: Colors.green,
-                                    size: 40,
-                                  ),
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              flex: 2,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    left: 30, right: 0, top: 10, bottom: 8),
+                                child: Icon(
+                                  Icons.point_of_sale,
+                                  color: Colors.green,
+                                  size: 40,
                                 ),
                               ),
-                              Flexible(
-                                flex: 9,
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                      left: 30, right: 30, top: 5, bottom: 5),
-                                  // decoration: BoxDecoration(
-                                  //   color: Colors.white,
-                                  //   borderRadius: BorderRadius.circular(8),
-                                  //   border: Border.fromBorderSide(
-                                  //       BorderSide(color: Colors.blue, width: 2.0)),
-                                  // ),
-                                  child: ListTile(
-                                    onTap: () {
-                                      Navigator.of(context).pushNamed(
-                                        '/infosales',
-                                        arguments: vendas,
-                                      );
-                                    },
-                                    title: Text(
-                                      vendas.costumer,
-                                      style: GoogleFonts.ubuntu(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                      ),
+                            ),
+                            Flexible(
+                              flex: 9,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    left: 30, right: 30, top: 5, bottom: 5),
+                                // decoration: BoxDecoration(
+                                //   color: Colors.white,
+                                //   borderRadius: BorderRadius.circular(8),
+                                //   border: Border.fromBorderSide(
+                                //       BorderSide(color: Colors.blue, width: 2.0)),
+                                // ),
+                                child: ListTile(
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(
+                                      '/infosales',
+                                      arguments: vendas,
+                                    );
+                                  },
+                                  title: Text(
+                                    vendas.costumer,
+                                    style: GoogleFonts.ubuntu(
+                                      color: Colors.black,
+                                      fontSize: 20,
                                     ),
-                                    subtitle: Text(
-                                      vendas.value.toString(),
-                                      style: GoogleFonts.ubuntu(
-                                        color: Colors.black,
-                                      ),
+                                  ),
+                                  subtitle: Text(
+                                    vendas.value.toString(),
+                                    style: GoogleFonts.ubuntu(
+                                      color: Colors.black,
                                     ),
-                                    trailing: Container(
-                                      width: 100,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            DateFormat("dd-MM-yyyy").format(
-                                                DateTime.parse(
-                                                    vendas.createdAt)),
-                                            style: GoogleFonts.ubuntu(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                            ),
+                                  ),
+                                  trailing: Container(
+                                    width: 100,
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          DateFormat("dd-MM-yyyy").format(
+                                              DateTime.parse(vendas.createdAt)),
+                                          style: GoogleFonts.ubuntu(
+                                            color: Colors.black,
+                                            fontSize: 16,
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                          Divider(),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                        Divider(),
+                      ],
                     );
                   },
                 );

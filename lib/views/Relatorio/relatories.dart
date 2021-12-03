@@ -21,7 +21,6 @@ class Relatories extends StatefulWidget {
 
 var lista2 = [
   'Hoje',
-  'Ontem',
   'Janeiro',
   'Fevereiro',
   'Março',
@@ -33,7 +32,9 @@ var lista2 = [
   'Setembro',
   'Outubro',
   'Novembro',
-  'Dezembro'
+  'Dezembro',
+  'Mais Vendido Anual',
+  'Mais Vendido Total'
 ];
 var lista3 = ['2021', '2022'];
 
@@ -44,6 +45,9 @@ var selecionadoDia = DateFormat("dd", "pt_BR").format(DateTime.now());
 var selecionadoOntem = int.parse(selecionadoDia) - 1;
 
 class _RelatoriesState extends State<Relatories> {
+  List<int> idSalesUsed;
+  List<String> idProductOrder;
+  var block;
   @override
   Widget build(BuildContext context) {
     var repositorySP =
@@ -54,9 +58,13 @@ class _RelatoriesState extends State<Relatories> {
     var infoProd = repositoryProduto.products;
     var itens = repositorySP.salesProducts;
 
-    var produtosVendas = [];
-    var produtosVendas2 = [];
-    var productsByIdSale = [];
+    block = false;
+
+    List<Product> productsByIdSale = [];
+    List<SaleProduct> produtosVendas = [];
+    List<SaleProduct> produtosVendas2 = [];
+    idSalesUsed = [];
+    idProductOrder = [];
 
     var repositorySales = Provider.of<SaleRepository>(context, listen: true);
     var sales = repositorySales.sales;
@@ -64,7 +72,158 @@ class _RelatoriesState extends State<Relatories> {
     selecionado =
         selecionado.replaceFirst(selecionado.characters.first, top, 0);
     Iterable<Sale> lista_certa;
-    List<Sale> vendas = sales;
+
+    if (selecionado == 'Mais Vendido Total') {
+      lista_certa = sales.where((element) => (true));
+      setState(() {
+        idSalesUsed = [];
+        idProductOrder = [];
+        block = true;
+      });
+    } else if (selecionado == 'Mais Vendido Anual') {
+      lista_certa = sales.where((element) =>
+          (DateTime.parse(element.createdAt).year ==
+              int.parse(selecionadoAno)));
+      setState(() {
+        idSalesUsed = [];
+        idProductOrder = [];
+        block = false;
+      });
+    } else if (selecionado != 'Hoje' &&
+        selecionado != 'Mais Vendido Anual' &&
+        selecionado != 'Mais Vendido Total') {
+      lista_certa = sales.where((element) =>
+          (DateTime.parse(element.createdAt).month ==
+              lista2.indexWhere((element) => element == selecionado)) &&
+          (DateTime.parse(element.createdAt).year ==
+              int.parse(selecionadoAno)));
+
+      setState(() {
+        idSalesUsed = [];
+        idProductOrder = [];
+        block = false;
+      });
+    } else if (selecionado == 'Hoje') {
+      lista_certa = sales.where((element) =>
+          (DateTime.parse(element.createdAt).month ==
+                  int.parse(selecionadoMes) &&
+              (DateTime.parse(element.createdAt).day ==
+                  int.parse(selecionadoDia)) &&
+              (DateTime.parse(element.createdAt).year ==
+                  int.parse(selecionadoAno))));
+      setState(() {
+        idSalesUsed = [];
+        idProductOrder = [];
+        block = false;
+      });
+    } else {
+      lista_certa = sales.where((element) =>
+          (DateTime.parse(element.createdAt).month ==
+                  int.parse(selecionadoMes) &&
+              (DateTime.parse(element.createdAt).day ==
+                  int.parse(selecionadoDia) - 1) &&
+              (DateTime.parse(element.createdAt).year ==
+                  int.parse(selecionadoAno))));
+      setState(() {
+        idSalesUsed = [];
+        idProductOrder = [];
+        block = false;
+      });
+    }
+
+    itens.forEach((element) {
+      lista_certa.forEach((e) {
+        if (element.sale_id == e.idSale) {
+          setState(() {
+            produtosVendas2.add(element);
+          });
+        }
+      });
+    });
+
+    itens.forEach((element) {
+      int cont = 0;
+
+      if (produtosVendas.isEmpty) {
+        lista_certa.forEach((e) {
+          if (element.sale_id == e.idSale) {
+            setState(() {
+              produtosVendas.add(element);
+              cont = 1;
+            });
+          }
+        });
+      } else {
+        produtosVendas.forEach((element2) {
+          if (element.product_id == element2.product_id) {
+            cont = 1;
+          }
+        });
+      }
+      if (cont == 0) {
+        lista_certa.forEach((e) {
+          if (element.sale_id == e.idSale) {
+            setState(() {
+              produtosVendas.add(element);
+            });
+          }
+        });
+      }
+    });
+
+    produtosVendas.forEach((produtosFiltrados) {
+      int cont = 0;
+      var idP = "";
+      cont = produtosFiltrados.qtd;
+      idP = produtosFiltrados.product_id;
+
+      produtosVendas2.forEach((produtosFiltradosMes) {
+        if (produtosFiltrados.product_id == produtosFiltradosMes.product_id &&
+            produtosFiltrados.sale_id != produtosFiltradosMes.sale_id) {
+          cont += produtosFiltradosMes.qtd;
+        }
+      });
+
+      setState(() {
+        idSalesUsed.add(cont);
+        idProductOrder.add(idP);
+      });
+    });
+
+    for (int i = 1; i < produtosVendas.length; i++) {
+      for (int j = 0; j < i; j++) {
+        if (produtosVendas[i].qtd > produtosVendas[j].qtd) {
+          var temp = produtosVendas[i];
+          produtosVendas[i] = produtosVendas[j];
+          produtosVendas[j] = temp;
+        }
+      }
+    }
+
+    for (int i = 1; i < idSalesUsed.length; i++) {
+      for (int j = 0; j < i; j++) {
+        if (idSalesUsed[i] > idSalesUsed[j]) {
+          int temp = idSalesUsed[i];
+          idSalesUsed[i] = idSalesUsed[j];
+          idSalesUsed[j] = temp;
+
+          var id = idProductOrder[i];
+          idProductOrder[i] = idProductOrder[j];
+          idProductOrder[j] = id;
+        }
+      }
+    }
+
+    idProductOrder.forEach((element2) {
+      infoProd.forEach((element) => {
+            if (element.id_product == element2)
+              {
+                setState(() {
+                  productsByIdSale.add(element);
+                })
+              }
+          });
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -125,162 +284,69 @@ class _RelatoriesState extends State<Relatories> {
         ),
         Divider(),
         Expanded(
-          child: Consumer<SaleRepository>(
-            builder: (context, value, child) {
-              Provider.of<SaleProductRepository>(context, listen: false).read();
-              if (selecionado != 'Hoje' && selecionado != 'Ontem') {
-                lista_certa = value.sales.where((element) =>
-                    (DateTime.parse(element.createdAt).month ==
-                        lista2.indexWhere((element) => element == selecionado) -
-                            1) &&
-                    (DateTime.parse(element.createdAt).year ==
-                        int.parse(selecionadoAno)));
-              } else if (selecionado == 'Hoje') {
-                lista_certa = value.sales.where((element) =>
-                    (DateTime.parse(element.createdAt).month ==
-                            int.parse(selecionadoMes) &&
-                        (DateTime.parse(element.createdAt).day ==
-                            int.parse(selecionadoDia)) &&
-                        (DateTime.parse(element.createdAt).year ==
-                            int.parse(selecionadoAno))));
-              } else {
-                lista_certa = value.sales.where((element) =>
-                    (DateTime.parse(element.createdAt).month ==
-                            int.parse(selecionadoMes) &&
-                        (DateTime.parse(element.createdAt).day ==
-                            int.parse(selecionadoDia) - 1) &&
-                        (DateTime.parse(element.createdAt).year ==
-                            int.parse(selecionadoAno))));
-              }
-
-              itens.forEach((element) {
-                lista_certa.forEach((e) {
-                  if (element.sale_id == e.idSale) {
-                    produtosVendas2.add(element);
-                  }
-                });
-              });
-
-              itens.forEach((element) {
-                int cont = 0;
-                if (produtosVendas.isEmpty == true) {
-                  lista_certa.forEach((e) {
-                    if (element.sale_id == e.idSale) {
-                      produtosVendas.add(element);
-                      cont = 1;
-                    }
-                  });
-                } else {
-                  produtosVendas.forEach((element2) {
-                    if (element.product_id == element2.product_id) {
-                      cont = 1;
-                    }
-                  });
-                }
-                if (cont == 0) {
-                  lista_certa.forEach((e) {
-                    if (element.sale_id == e.idSale) {
-                      produtosVendas.add(element);
-                    }
-                  });
-                }
-              });
-
-              for (var i = 0; i < produtosVendas.length; i++) {
-                for (var j = 0; j < produtosVendas2.length; j++) {
-                  if (produtosVendas[i].product_id ==
-                          produtosVendas2[j].product_id &&
-                      produtosVendas[i].sale_id != produtosVendas2[j].sale_id) {
-                    produtosVendas[i].qtd =
-                        produtosVendas[i].qtd + produtosVendas2[j].qtd;
-                  }
-                }
-              }
-
-              for (int i = 1; i < produtosVendas.length; i++) {
-                for (int j = 0; j < i; j++) {
-                  if (produtosVendas[i].qtd > produtosVendas[j].qtd) {
-                    var temp = produtosVendas[i];
-                    produtosVendas[i] = produtosVendas[j];
-                    produtosVendas[j] = temp;
-                  }
-                }
-              }
-
-              produtosVendas.forEach((element2) {
-                infoProd.forEach((element) => {
-                      if (element.id_product == element2.product_id)
-                        {
-                          productsByIdSale.add(element),
-                        }
-                    });
-              });
-
-              return ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: produtosVendas.length,
-                // ignore: missing_return
-                itemBuilder: (_, index) {
-                  var products = produtosVendas.toList()[index];
-                  var productsName = productsByIdSale.toList()[index];
-                  return Column(
+          child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: produtosVendas.length,
+            // ignore: missing_return
+            itemBuilder: (_, index) {
+              var products = idSalesUsed.toList()[index];
+              var productsName = productsByIdSale.toList()[index];
+              return Column(
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          Flexible(
-                            flex: 2,
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                  left: 30, right: 0, top: 10, bottom: 8),
-                              child: Icon(
-                                Icons.point_of_sale,
-                                color: Colors.green,
-                                size: 40,
-                              ),
-                            ),
+                      Flexible(
+                        flex: 2,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              left: 30, right: 0, top: 10, bottom: 8),
+                          child: Icon(
+                            Icons.point_of_sale,
+                            color: Colors.green,
+                            size: 40,
                           ),
-                          Flexible(
-                            flex: 9,
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                  left: 30, right: 30, top: 5, bottom: 5),
-                              // decoration: BoxDecoration(
-                              //   color: Colors.white,
-                              //   borderRadius: BorderRadius.circular(8),
-                              //   border: Border.fromBorderSide(
-                              //       BorderSide(color: Colors.blue, width: 2.0)),
-                              // ),
-                              child: ListTile(
-                                title: Text(
-                                  productsName.name,
-                                  style: GoogleFonts.ubuntu(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                trailing: Container(
-                                  width: 30,
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        products.qtd.toString(),
-                                        style: GoogleFonts.ubuntu(
-                                            color: Colors.black, fontSize: 20),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                      Divider(),
+                      Flexible(
+                        flex: 9,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              left: 30, right: 30, top: 5, bottom: 5),
+                          child: ListTile(
+                            title: Text(
+                              productsName.name,
+                              style: GoogleFonts.ubuntu(
+                                color: Colors.black,
+                                fontSize: 20,
+                              ),
+                            ),
+                            subtitle: Text(
+                              "Categoria: " + productsName.name_category,
+                              style: GoogleFonts.ubuntu(
+                                color: Colors.black,
+                                fontSize: 14,
+                              ),
+                            ),
+                            trailing: Container(
+                              width: 30,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    products.toString(),
+                                    style: GoogleFonts.ubuntu(
+                                        color: Colors.black, fontSize: 20),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
-                  );
-                },
+                  ),
+                  Divider(),
+                ],
               );
-              itens.clear();
             },
           ),
         ),
@@ -352,11 +418,15 @@ class _RelatoriesState extends State<Relatories> {
                     child: Text(value),
                   );
                 }).toList(),
-                onChanged: (String newValue) {
-                  setState(() {
-                    selecionadoAno = newValue;
-                  });
-                },
+                onChanged: (block == true)
+                    ? null
+                    : (String newValue) {
+                        setState(() {
+                          selecionadoAno = newValue;
+                          idSalesUsed = [];
+                          idProductOrder = [];
+                        });
+                      },
               ),
             ),
           ),
