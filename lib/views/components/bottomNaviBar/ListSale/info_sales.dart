@@ -188,14 +188,14 @@ class InfoSales extends StatelessWidget {
                                     ),
                                   ),
                                   trailing: Container(
-                                    width: 100,
+                                    width: 50,
                                     child: Row(
                                       children: [
                                         Text(
                                           produtos.qtd.toString(),
                                           style: GoogleFonts.ubuntu(
                                             color: Colors.black,
-                                            fontSize: 15,
+                                            fontSize: 18,
                                           ),
                                         ),
                                       ],
