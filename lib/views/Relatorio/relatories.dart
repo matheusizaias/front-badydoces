@@ -300,11 +300,20 @@ class _RelatoriesState extends State<Relatories> {
                         child: Container(
                           margin: EdgeInsets.only(
                               left: 30, right: 0, top: 10, bottom: 8),
-                          child: Icon(
-                            Icons.point_of_sale,
-                            color: Colors.green,
-                            size: 40,
-                          ),
+                          child: (index < 3)
+                              ? Icon(
+                                  Icons.star_purple500_sharp,
+                                  color: (index == 0)
+                                      ? Colors.amber
+                                      : (index == 1)
+                                          ? Colors.grey[400]
+                                          : (index == 2)
+                                              ? Color.fromARGB(
+                                                  500, 205, 127, 50)
+                                              : Colors.black,
+                                  size: 40,
+                                )
+                              : Icon(Icons.arrow_forward_ios, size: 40),
                         ),
                       ),
                       Flexible(
